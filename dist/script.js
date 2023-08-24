@@ -1,6 +1,98 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/form.js":
+/*!********************************!*\
+  !*** ./src/js/modules/form.js ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// import { error, type } from "jquery";
+
+function form(state) {
+  const forms = document.querySelectorAll('.form'),
+    inputs = document.querySelectorAll('input');
+  //   console.log(inputs)
+  //   console.log(forms)
+  const message = {
+    loading: 'идет загрузка...',
+    sucsess: 'загрузка завершена',
+    failure: 'произошла ошибка'
+  };
+
+  // const postData = async (url, data) => {
+  //     document.querySelector('.status').textContent = message.loading;
+  //     let res = await fetch(url, {
+  //         method: "POST",
+  //         body: data
+  //     });
+
+  //     return await res.text();
+  // };
+
+  let request = async (url, data) => {
+    document.querySelector('.status').textContent = message.loading;
+    let res = await fetch(url, {
+      method: 'POST',
+      body: data
+      // headers:{
+      //     'Content-type': 'multipart/form-data'
+      // }
+    });
+
+    return await res.text();
+  };
+  const clearInputs = () => {
+    inputs.forEach(item => {
+      item.value = '';
+    });
+  };
+  forms.forEach(item => {
+    item.addEventListener('submit', e => {
+      e.preventDefault();
+      let statusMessage = document.createElement('div');
+      statusMessage.classList.add('status');
+      item.appendChild(statusMessage);
+      const formData = new FormData(item);
+      if (item.getAttribute('data-calc') === "end") {
+        for (let key in state) {
+          formData.append(key, state[key]);
+        }
+      }
+
+      // fetch('assets/server.php', {
+      //     method: 'POST',
+      //     body: formData
+      // })
+      // .then(res =>{
+      //     console.log(res)
+      // })
+      // .catch(()=>{
+      //     console.log('false')
+      // })
+
+      // const formParse = Object.fromEntries(formData.entries());
+
+      request('assets/server.php', formData).then(res => {
+        console.log(res);
+        statusMessage.textContent = message.sucsess;
+      }).catch(() => {
+        statusMessage.textContent = message.failure;
+      }).finally(() => {
+        clearInputs();
+        setTimeout(() => {
+          statusMessage.remove();
+        }, 3000);
+      });
+    });
+  });
+}
+/* harmony default export */ __webpack_exports__["default"] = (form);
+
+/***/ }),
+
 /***/ "./src/js/modules/modal.js":
 /*!*********************************!*\
   !*** ./src/js/modules/modal.js ***!
@@ -21,27 +113,80 @@ function modals() {
   }
   ;
   function modal(triggerSelector, modalSelector) {
-    const trigger = document.querySelector(triggerSelector),
+    const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       closeBtn = modal.querySelector('strong');
-    trigger.addEventListener('click', e => {
-      e.preventDefault();
-      openModal(modal);
-      clearTimeout(modalTimerId);
+    trigger.forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        openModal(modal);
+        document.body.style.overflow = 'hidden';
+        clearTimeout(modalTimerId);
+      });
     });
     modal.addEventListener('click', e => {
       if (e.target == modal || e.target == closeBtn) {
         closeModal(modal);
+        document.body.style.overflow = '';
       }
     });
   }
   modal('.popup_engineer_btn', '.popup_engineer');
   modal('.phone_link', '.popup');
-  const modalTimerId = setTimeout(() => {
-    document.querySelector('.popup').classList.add('show');
-  }, 10000);
+  // const modalTimerId = setTimeout(()=>{
+  //     document.querySelector('.popup').classList.add('show')
+  // } , 10000)
 }
+
 /* harmony default export */ __webpack_exports__["default"] = (modals);
+
+/***/ }),
+
+/***/ "./src/js/modules/tabs.js":
+/*!********************************!*\
+  !*** ./src/js/modules/tabs.js ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
+  const tabs = document.querySelectorAll(tabSelector),
+    tabContent = document.querySelectorAll(tabContentSelector);
+  const header = document.querySelector(headerSelector);
+  console.log(header);
+
+  //   console.dir(`tab ${tabs}`)
+  //   console.log(`tabcontent ${tabContent}`)
+
+  function hideTab() {
+    tabs.forEach(item => {
+      item.classList.remove(activeClass);
+    });
+    tabContent.forEach(item => {
+      item.classList.remove('show');
+      item.classList.add('hide');
+    });
+  }
+  function showTab(number) {
+    tabContent[number].classList.add('show');
+    tabs[number].classList.add(activeClass);
+  }
+  ;
+  hideTab();
+  showTab(4);
+  header.addEventListener('click', e => {
+    if (e.target.classList.contains('glazing_block') || e.target.parentNode.classList.contains('glazing_block')) {
+      hideTab();
+      tabs.forEach((item, i) => {
+        if (item == e.target || e.target.parentNode == item) {
+          showTab(i);
+        }
+      });
+    }
+  });
+}
+/* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
 
@@ -13945,11 +14090,20 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./slider */ "./src/js/slider.js");
 /* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+/* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
+/* harmony import */ var _modules_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/form */ "./src/js/modules/form.js");
+
+
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
+  let modalState = {};
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.active', '.glazing_slider');
+  // tabs('.glazing_block', '.glazing_content', 'active','.slick-track');
+  // tabs('.glazing_slider ', '.glazing_block', 'active','.glazing_slider');
 });
 }();
 /******/ })()
