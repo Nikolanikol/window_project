@@ -4,7 +4,8 @@
 .hide{
     display: none;
 }
-.tab-active-red{
+
+.tab-active{
     color: red;
     background-color: aqua;
 }

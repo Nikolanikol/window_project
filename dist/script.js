@@ -1,6 +1,66 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function calc() {
+  const calcBtn = document.querySelectorAll('.glazing_price_btn'),
+    popupCalc = document.querySelector('.popup_calc'),
+    popupCalcBtn = document.querySelector('.popup_calc_button'),
+    popupCalcProfileBtn = document.querySelector('.popup_calc_profile_button'),
+    popupCalcEndClose = document.querySelector('.popup_calc_end_close');
+  calcBtn.forEach(item => {
+    item.addEventListener('click', () => {
+      openModal('.popup_calc');
+    });
+    popupCalc.addEventListener('click', e => {
+      if (e.target == popupCalc || e.target == popupCalc.querySelector('strong')) {
+        closeModal('.popup_calc');
+      }
+    });
+    popupCalcBtn.addEventListener('click', () => {
+      closeModal('.popup_calc');
+      openModal('.popup_calc_profile');
+      // place for obj create
+    });
+
+    popupCalcProfileBtn.addEventListener('click', () => {
+      closeModal('.popup_calc_profile');
+      openModal('.popup_calc_end');
+      // place for obj create
+    });
+
+    popupCalcEndClose.addEventListener('click', e => {
+      // created array responce to server
+      e.preventDefault();
+      closeModal('.popup_calc_end');
+    });
+    function openModal(modalSelector) {
+      document.querySelector(modalSelector).classList.remove('hide');
+      document.querySelector(modalSelector).classList.add('show');
+    }
+    ;
+    function closeModal(modalSelector) {
+      document.querySelector(modalSelector).classList.remove('show');
+      document.querySelector(modalSelector).classList.add('hide');
+    }
+    ;
+
+    // popup_calc popup_calc_profile popup_calc_end
+  });
+}
+
+calc();
+/* harmony default export */ __webpack_exports__["default"] = (calc);
+
+/***/ }),
+
 /***/ "./src/js/modules/form.js":
 /*!********************************!*\
   !*** ./src/js/modules/form.js ***!
@@ -21,6 +81,12 @@ function form(state) {
     sucsess: 'загрузка завершена',
     failure: 'произошла ошибка'
   };
+  const numInputs = document.querySelectorAll('input[name="user_phone"');
+  numInputs.forEach(item => {
+    item.addEventListener('input', () => {
+      item.value = item.value.replace(/\D/, '');
+    });
+  });
 
   // const postData = async (url, data) => {
   //     document.querySelector('.status').textContent = message.loading;
@@ -161,7 +227,7 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
 
   function hideTab() {
     tabs.forEach(item => {
-      item.classList.remove(activeClass);
+      item.classList.remove(activeClass.replace(/\./, ''));
     });
     tabContent.forEach(item => {
       item.classList.remove('show');
@@ -170,13 +236,13 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
   }
   function showTab(number) {
     tabContent[number].classList.add('show');
-    tabs[number].classList.add(activeClass);
+    tabs[number].classList.add(activeClass.replace(/\./, ''));
   }
   ;
   hideTab();
-  showTab(4);
+  showTab(0);
   header.addEventListener('click', e => {
-    if (e.target.classList.contains('glazing_block') || e.target.parentNode.classList.contains('glazing_block')) {
+    if (e.target.classList.contains(tabSelector.replace(/\./, '')) || e.target.parentNode.classList.contains(tabSelector.replace(/\./, ''))) {
       hideTab();
       tabs.forEach((item, i) => {
         if (item == e.target || e.target.parentNode == item) {
@@ -186,6 +252,7 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
     }
   });
 }
+tabs('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider');
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
@@ -14092,6 +14159,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/form */ "./src/js/modules/form.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+
 
 
 
@@ -14101,9 +14170,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let modalState = {};
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])();
   (0,_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
-  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.active', '.glazing_slider');
-  // tabs('.glazing_block', '.glazing_content', 'active','.slick-track');
-  // tabs('.glazing_slider ', '.glazing_block', 'active','.glazing_slider');
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.tab-active', '.glazing_slider');
+  // calc()
 });
 }();
 /******/ })()

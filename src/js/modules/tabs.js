@@ -9,7 +9,7 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector){
 
     function hideTab(){
         tabs.forEach(item =>{
-            item.classList.remove(activeClass);
+            item.classList.remove(activeClass.replace(/\./,''));
         })
         tabContent.forEach(item => {
             item.classList.remove('show');
@@ -19,15 +19,15 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector){
 
     function showTab(number){
         tabContent[number].classList.add('show')
-        tabs[number].classList.add(activeClass)
+        tabs[number].classList.add(activeClass.replace(/\./,''))
     };
     
 
     hideTab();
-    showTab(4);
+    showTab(0);
 
      header.addEventListener('click',(e)=>{
-        if(e.target.classList.contains('glazing_block') || e.target.parentNode.classList.contains('glazing_block')){
+        if(e.target.classList.contains(tabSelector.replace(/\./,'')) || e.target.parentNode.classList.contains(tabSelector.replace(/\./,''))){
             hideTab();
             tabs.forEach((item, i) =>{
                 if(item == e.target || e.target.parentNode == item){
@@ -37,5 +37,5 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector){
         }      
      })
 }
-
+tabs('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider')
 export default tabs;

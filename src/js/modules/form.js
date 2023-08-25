@@ -11,7 +11,13 @@ function form(state){
         failure: 'произошла ошибка'
     };
   
-
+    const numInputs = document.querySelectorAll('input[name="user_phone"')
+    
+    numInputs.forEach(item =>{
+        item.addEventListener('input',()=>{
+            item.value = item.value.replace(/\D/, '');
+        })
+    })
 
     // const postData = async (url, data) => {
     //     document.querySelector('.status').textContent = message.loading;
@@ -83,7 +89,6 @@ function form(state){
                     setTimeout(()=>{
                         statusMessage.remove()
                     }
-                        
                     ,3000);
                 });
         });
