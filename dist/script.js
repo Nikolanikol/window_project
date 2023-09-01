@@ -11,140 +11,46 @@
 __webpack_require__.r(__webpack_exports__);
 // import { forEach } from "core-js/core/array";
 
-function calc() {
-  const calcBtn = document.querySelectorAll('.glazing_price_btn'),
-    popupCalc = document.querySelector('.popup_calc'),
-    popupCalcBigImg = document.querySelectorAll('.big_img img'),
+function calc(calcObj) {
+  const popupCalc = document.querySelector('.popup_calc'),
     popupCalcBtn = document.querySelector('.popup_calc_button'),
     popupCalcProfileContent = document.querySelector('.popup_calc_profile'),
-    popupCalcProfileBtn = document.querySelector('.popup_calc_profile_button'),
-    popupCalcEndClose = document.querySelector('.popup_calc_end');
+    popupCalcProfileBtn = document.querySelector('.popup_calc_profile_button');
   const popupCalcInputs = popupCalc.querySelectorAll('input'),
     popupCalcProfileFormControl = document.querySelector('#view_type');
-  console.log(popupCalcProfileFormControl.value);
-  console.log(popupCalcBigImg);
-  let calcObj = {
-    width: 'none',
-    height: 'none',
-    profileType: 'none',
-    profileOption: 'none'
-  };
-  // обработчик событий для открытия popupCalcModal + проверка для ввода инпутов
-  calcBtn.forEach(item => {
+  popupCalcBtn.addEventListener('click', () => {
+    popupCalcInputs.forEach(item => {
+      if (item.getAttribute('id') == 'width') {
+        calcObj.width = item.value;
+      }
+      if (item.getAttribute('id') == 'height') {
+        calcObj.height = item.value;
+      }
+    });
+    console.log(calcObj);
+  });
+  const checkBoxInput = document.querySelectorAll('.checkbox'),
+    checkboxCustom = popupCalcProfileContent.querySelectorAll('.checkbox-custom');
+  checkBoxInput.forEach((item, i) => {
     item.addEventListener('click', () => {
-      openModal(popupCalc);
-      popupCalcInputs.forEach(item => {
-        item.addEventListener('input', () => {
-          item.value = item.value.replace(/\D/, '');
-        });
-      });
-    });
-
-    //   добавляет обработчик события на подложку и кнопку закрытия
-    calcModalClose(popupCalc);
-    calcModalClose(popupCalcProfileContent);
-    calcModalClose(popupCalcEndClose);
-    popupCalcBtn.addEventListener('click', () => {
-      closeModal(popupCalc);
-      popupCalcBigImg[0].classList.add('show');
-      openModal(popupCalcProfileContent);
-      // place for obj create
-      popupCalcInputs.forEach(item => {
-        if (item.getAttribute('id') == 'width') {
-          calcObj.width = item.value;
-        }
-        if (item.getAttribute('id') == 'height') {
-          calcObj.height = item.value;
+      checkBoxInput.forEach((item, j) => {
+        item.checked = false;
+        if (i == j) {
+          item.checked = true;
         }
       });
-      console.log(calcObj);
-    });
-    const checkBoxInput = document.querySelectorAll('.checkbox'),
-      checkboxCustom = popupCalcProfileContent.querySelectorAll('.checkbox-custom');
-    checkBoxInput.forEach((item, i) => {
-      item.addEventListener('click', () => {
-        checkBoxInput.forEach((item, j) => {
-          item.checked = false;
-          if (i == j) {
-            item.checked = true;
-          }
-        });
-        checkboxCustom.forEach((item, k) => {
-          if (i == k) {
-            calcObj.profileOption = item.getAttribute('id');
-          }
-        });
-      });
-    });
-    popupCalcProfileBtn.addEventListener('click', () => {
-      closeModal(popupCalcProfileContent);
-      openModal(popupCalcEndClose);
-      // place for obj create
-      calcObj.profileType = popupCalcProfileFormControl.value;
-      console.log(calcObj);
-    });
-    let request = async (url, data) => {
-      let res = await fetch(url, {
-        method: 'POST',
-        body: data
-        // headers:{
-        //     'Content-type': 'multipart/form-data'
-        // }
-      });
-
-      return await res.text();
-    };
-    popupCalcEndClose.querySelector('form').addEventListener('submit', e => {
-      // created array responce to server
-      e.preventDefault();
-      let calcObjParse = new FormData();
-      for (let key in calcObj) {
-        calcObjParse.append(key, calcObj[key]);
-      }
-      request('assets/server.php', calcObjParse).then(res => {
-        console.log(res);
-      }).catch(() => {
-        console.log('calc obj mistake');
-      });
-      closeModal(popupCalcEndClose);
-    });
-    popupCalc.addEventListener('click', e => {
-      if (e.target.classList.contains('balcon_icons_img') || e.target.parentNode.classList.contains('balcon_icons_img')) {
-        document.querySelectorAll('.balcon_icons_img').forEach((item, i) => {
-          if (item == e.target || item == e.target.parentNode) {
-            popupCalcBigImg.forEach(item => {
-              item.classList.remove('show');
-              item.style.margin = '0 auto';
-              item.style.width = '400px';
-              item.style.height = '300px';
-            });
-            popupCalcBigImg[i].classList.add('show');
-          }
-        });
-      }
-    });
-    function openModal(selector) {
-      selector.classList.remove('hide');
-      selector.classList.add('show');
-    }
-    ;
-    function closeModal(selector) {
-      selector.classList.remove('show');
-      selector.classList.add('hide');
-    }
-    ;
-    function calcModalClose(selector) {
-      selector.addEventListener('click', e => {
-        if (e.target == selector || e.target == selector.querySelector('strong')) {
-          closeModal(selector);
+      checkboxCustom.forEach((item, k) => {
+        if (i == k) {
+          calcObj.profileOption = item.getAttribute('id');
         }
       });
-    }
-    // popup_calc popup_calc_profile popup_calc_end
+    });
+  });
+  popupCalcProfileBtn.addEventListener('click', () => {
+    calcObj.profileType = popupCalcProfileFormControl.value;
+    console.log(calcObj);
   });
 }
-
-calc();
 /* harmony default export */ __webpack_exports__["default"] = (calc);
 
 /***/ }),
@@ -159,7 +65,7 @@ calc();
 __webpack_require__.r(__webpack_exports__);
 // import { error, type } from "jquery";
 
-function form(state) {
+function form(calcObj) {
   const forms = document.querySelectorAll('.form'),
     inputs = document.querySelectorAll('input');
   //   console.log(inputs)
@@ -211,8 +117,8 @@ function form(state) {
       item.appendChild(statusMessage);
       const formData = new FormData(item);
       if (item.getAttribute('data-calc') === "end") {
-        for (let key in state) {
-          formData.append(key, state[key]);
+        for (let key in calcObj) {
+          formData.append(key, calcObj[key]);
         }
       }
 
@@ -269,7 +175,9 @@ function modals() {
   function modal(triggerSelector, modalSelector) {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
-      closeBtn = modal.querySelector('strong');
+      closeBtn = modal.querySelector('strong'),
+      window = document.querySelectorAll('[data-modal]');
+    console.log(window);
     trigger.forEach(item => {
       item.addEventListener('click', e => {
         e.preventDefault();
@@ -282,11 +190,17 @@ function modals() {
       if (e.target == modal || e.target == closeBtn) {
         closeModal(modal);
         document.body.style.overflow = '';
+        window.forEach(item => {
+          closeModal(item);
+        });
       }
     });
   }
   modal('.popup_engineer_btn', '.popup_engineer');
   modal('.phone_link', '.popup');
+  modal('.glazing_price_btn', '.popup_calc');
+  modal('.popup_calc_button', '.popup_calc_profile ');
+  modal('.popup_calc_profile_button', '.popup_calc_end');
   // const modalTimerId = setTimeout(()=>{
   //     document.querySelector('.popup').classList.add('show')
   // } , 10000)
@@ -323,6 +237,12 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
     });
   }
   function showTab(number) {
+    if (tabContentSelector == '.big_img img') {
+      document.querySelectorAll('.big_img img').forEach(item => {
+        item.style.margin = '0 auto';
+        item.style.padding = '15px 0px 15px 0px';
+      });
+    }
     tabContent[number].classList.add('show');
     tabs[number].classList.add(activeClass.replace(/\./, ''));
   }
@@ -340,7 +260,6 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector) {
     }
   });
 }
-tabs('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider');
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
@@ -14255,10 +14174,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  let modalState = {};
+  let calcObj = {
+    width: 'none',
+    height: 'none',
+    profileType: 'none',
+    profileOption: 'none'
+  };
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  (0,_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  (0,_modules_calc__WEBPACK_IMPORTED_MODULE_4__["default"])(calcObj);
+  (0,_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])(calcObj);
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider');
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.tab-active', '.glazing_slider');
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons_img', '.big_img img', '.do_image_more', '.balcon_icons');
   // calc()
 });
 }();

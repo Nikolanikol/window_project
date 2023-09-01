@@ -4,8 +4,3 @@
 .hide{
     display: none;
 }
-
-.tab-active{
-    color: red;
-    background-color: aqua;
-}

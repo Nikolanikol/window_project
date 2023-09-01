@@ -1,6 +1,8 @@
 // import { error, type } from "jquery";
 
-function form(state){
+
+
+function form(calcObj){
     const forms = document.querySelectorAll('.form'),
           inputs = document.querySelectorAll('input');
         //   console.log(inputs)
@@ -57,8 +59,8 @@ function form(state){
 
             const formData = new FormData(item);
             if (item.getAttribute('data-calc') === "end") {
-                for (let key in state) {
-                    formData.append(key, state[key]);
+                for (let key in calcObj) {
+                    formData.append(key, calcObj[key]);
                 }
             }
 

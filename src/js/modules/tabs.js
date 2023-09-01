@@ -18,6 +18,12 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector){
     }
 
     function showTab(number){
+        if(tabContentSelector == '.big_img img'){
+            document.querySelectorAll('.big_img img').forEach(item =>{
+                item.style.margin = '0 auto';
+                item.style.padding = '15px 0px 15px 0px'
+            })
+        }
         tabContent[number].classList.add('show')
         tabs[number].classList.add(activeClass.replace(/\./,''))
     };
@@ -37,5 +43,4 @@ function tabs(tabSelector, tabContentSelector, activeClass, headerSelector){
         }      
      })
 }
-tabs('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider')
 export default tabs;

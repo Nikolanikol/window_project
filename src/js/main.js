@@ -9,9 +9,17 @@ import calc from './modules/calc';
 
 document.addEventListener('DOMContentLoaded',()=>{
 
-    let modalState = {};
+    let calcObj = {
+        width: 'none',
+        height: 'none',
+        profileType: 'none',
+        profileOption: 'none',
+    };
     modals();
-    form(modalState);
+    calc(calcObj)
+    form(calcObj);
+    tabs('.no_click', '.decoration_content>div>div', '.after_click', '.decoration_slider');
     tabs('.glazing_block', '.glazing_content', '.tab-active','.glazing_slider');
+    tabs('.balcon_icons_img', '.big_img img', '.do_image_more', '.balcon_icons');
     // calc()
 })
