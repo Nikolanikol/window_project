@@ -6,7 +6,7 @@ import tabs from './modules/tabs';
 import modals from './modules/modal';
 import form from './modules/form';
 import calc from './modules/calc';
-
+import images from './modules/images';
 document.addEventListener('DOMContentLoaded',()=>{
 
     let calcObj = {
@@ -22,4 +22,5 @@ document.addEventListener('DOMContentLoaded',()=>{
     tabs('.glazing_block', '.glazing_content', '.tab-active','.glazing_slider');
     tabs('.balcon_icons_img', '.big_img img', '.do_image_more', '.balcon_icons');
     // calc()
+    images()
 })
